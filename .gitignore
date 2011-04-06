@@ -1,2 +1,6 @@
 Snake.cbp
 Snake.depend
+Snake
+bin/
+obj/
+*.o
