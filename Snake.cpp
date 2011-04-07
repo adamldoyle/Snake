@@ -17,6 +17,21 @@ Snake::~Snake()
     }
 }
 
+void Snake::reset()
+{
+    SnakeSection *temp, *curr = m_head->m_nextSection;
+    while (curr != NULL)
+    {
+        temp = curr;
+        curr = curr->m_nextSection;
+        delete temp;
+    }
+    m_head->m_nextSection = NULL;
+    m_tail = m_head;
+    m_head->SetPosition(0.f, 0.f);
+    m_head->m_eDirection = RIGHT;
+}
+
 void Snake::Render(sf::RenderTarget& target, sf::Renderer& renderer) const
 {
     SnakeSection* curr = m_head;
@@ -80,14 +95,4 @@ bool Snake::isOutOfBounds(sf::FloatRect viewRect)
 {
     return (m_head->GetPosition().x < viewRect.Left || m_head->GetPosition().y < viewRect.Top
         || m_head->GetPosition().x + m_head->m_nDimension > viewRect.Left + viewRect.Width || m_head->GetPosition().y + m_head->m_nDimension > viewRect.Top + viewRect.Height);
-}
-
-void Snake::stop()
-{
-    SnakeSection* curr = m_head;
-    while (curr != NULL)
-    {
-        curr->stop();
-        curr = curr->m_nextSection;
-    }
 }

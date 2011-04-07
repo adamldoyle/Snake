@@ -15,7 +15,7 @@ class Snake : public sf::Drawable
         bool isCollision(GamePiece& otherPiece);
         bool isSnakeCollision();
         bool isOutOfBounds(sf::FloatRect viewRect);
-        void stop();
+        void reset();
     protected:
         virtual void Render(sf::RenderTarget& target, sf::Renderer& renderer) const;
     private:

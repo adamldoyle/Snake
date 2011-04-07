@@ -16,7 +16,6 @@ class SnakeSection : public GamePiece
     protected:
         SnakeSection* m_nextSection;
         void start();
-        void stop();
     private:
         static const int VELOCITY = 50;
 };

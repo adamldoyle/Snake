@@ -28,8 +28,3 @@ void SnakeSection::start()
 {
     m_nVelocity = VELOCITY;
 }
-
-void SnakeSection::stop()
-{
-    m_nVelocity = 0;
-}

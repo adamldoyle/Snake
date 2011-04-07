@@ -21,6 +21,7 @@ class GamePiece : public sf::Drawable
         virtual ~GamePiece() { }
         virtual void Move();
         bool isCollision(GamePiece& otherPiece);
+        void randomizePosition();
     protected:
         virtual void Render(sf::RenderTarget& target, sf::Renderer& renderer) const;
         sf::Shape m_visual;

@@ -14,6 +14,7 @@ class SnakeGame
         void run();
     protected:
     private:
+        void reset();
         void resetEvents();
         void handleEvents();
         void updateGame();
@@ -25,6 +26,8 @@ class SnakeGame
         Food m_food;
         Direction m_eUserDirection;
         sf::FloatRect m_viewRect;
+        bool m_bPaused;
+        bool m_bGameOver;
 };
 
 #endif // SNAKE_GAME_H
