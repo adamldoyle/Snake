@@ -59,5 +59,5 @@ bool GamePiece::isCollision(GamePiece& otherPiece)
 
 void GamePiece::randomizePosition()
 {
-    SetPosition((rand() % 56) * 50, (rand() % 56) * 50);
+    SetPosition((rand() % 40) * 50, (rand() % 40) * 50);
 }

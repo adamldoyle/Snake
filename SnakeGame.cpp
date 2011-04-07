@@ -4,7 +4,7 @@ const int FRAMES_PER_SECOND = 10;
 const float SKIP_TICKS = 1000 / FRAMES_PER_SECOND;
 const int SLEEP_TICKS = 10;
 
-SnakeGame::SnakeGame() : m_food(0, 0), m_viewRect(0.f, 0.f, 2790.f, 2790.f), m_bPaused(false), m_bGameOver(false)
+SnakeGame::SnakeGame() : m_food(0, 0), m_viewRect(0.f, 0.f, 1990.f, 1990.f), m_bPaused(false), m_bGameOver(false)
 {
     m_app.Create(sf::VideoMode(700.f, 700.f), "Snake");
     sf::View view(m_viewRect);
