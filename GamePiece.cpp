@@ -59,5 +59,11 @@ bool GamePiece::isCollision(GamePiece& otherPiece)
 
 void GamePiece::randomizePosition()
 {
-    SetPosition((rand() % 40) * 50, (rand() % 40) * 50);
+    SetPosition((rand() % PIXEL_LINE_COUNT) * PIXEL_DIMENSION, (rand() % PIXEL_LINE_COUNT) * PIXEL_DIMENSION);
+}
+
+void GamePiece::getPosition(int nPosition[2])
+{
+    nPosition[0] = (int)GetPosition().x / PIXEL_DIMENSION;
+    nPosition[1] = (int)GetPosition().y / PIXEL_DIMENSION;
 }

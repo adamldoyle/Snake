@@ -1,6 +1,6 @@
 #include "Snake.h"
 
-Snake::Snake() : sf::Drawable()
+Snake::Snake() : sf::Drawable(), m_nSize(1)
 {
     m_head = m_tail = new SnakeSection(0.f, 0.f, RIGHT);
     m_head->start();
@@ -44,6 +44,15 @@ void Snake::Render(sf::RenderTarget& target, sf::Renderer& renderer) const
 
 void Snake::Move()
 {
+    if (m_tail->m_pendingNextSection != NULL && m_tail->isCollision(*(m_tail->m_pendingNextSection)))
+    {
+        m_tail->m_nextSection = m_tail->m_pendingNextSection;
+        m_tail->m_pendingNextSection = NULL;
+        m_tail = m_tail->m_nextSection;
+        m_tail->start();
+        m_nSize++;
+    }
+
     m_head->Move();
 }
 
@@ -68,8 +77,12 @@ void Snake::ChangeDirection(Direction& eDirection)
 
 void Snake::addSection(SnakeSection& section)
 {
-    m_tail->m_nextSection = &section;
-    m_tail = &section;
+    SnakeSection* curr = m_tail;
+    while (curr->m_pendingNextSection != NULL)
+    {
+        curr = curr->m_pendingNextSection;
+    }
+    curr->m_pendingNextSection = &section;
 }
 
 bool Snake::isCollision(GamePiece& otherPiece)
@@ -77,22 +90,23 @@ bool Snake::isCollision(GamePiece& otherPiece)
     return m_head->isCollision(otherPiece);
 }
 
-bool Snake::isSnakeCollision()
-{
-    SnakeSection* curr = m_head->m_nextSection;
-    while (curr != NULL)
-    {
-        if (curr->m_nVelocity > 0 && isCollision(*curr))
-        {
-            return true;
-        }
-        curr = curr->m_nextSection;
-    }
-    return false;
-}
-
 bool Snake::isOutOfBounds(sf::FloatRect viewRect)
 {
     return (m_head->GetPosition().x < viewRect.Left || m_head->GetPosition().y < viewRect.Top
         || m_head->GetPosition().x + m_head->m_nDimension > viewRect.Left + viewRect.Width || m_head->GetPosition().y + m_head->m_nDimension > viewRect.Top + viewRect.Height);
+}
+
+void Snake::getHeadPosition(int nPosition[2])
+{
+    m_head->getPosition(nPosition);
+}
+
+void Snake::getTailPosition(int nPosition[2])
+{
+    m_tail->getPosition(nPosition);
+}
+
+int Snake::getSize()
+{
+    return m_nSize;
 }

@@ -1,6 +1,7 @@
 #ifndef FOOD_H
 #define FOOD_H
 
+#include "Common.h"
 #include "GamePiece.h"
 
 class Food : public GamePiece

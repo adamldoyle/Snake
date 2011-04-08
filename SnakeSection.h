@@ -1,6 +1,7 @@
 #ifndef SNAKE_SECTION_H
 #define SNAKE_SECTION_H
 
+#include "Common.h"
 #include "GamePiece.h"
 
 class SnakeSection;
@@ -15,6 +16,7 @@ class SnakeSection : public GamePiece
         void Move();
     protected:
         SnakeSection* m_nextSection;
+        SnakeSection* m_pendingNextSection;
         void start();
     private:
         static const int VELOCITY = 50;

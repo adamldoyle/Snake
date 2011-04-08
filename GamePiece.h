@@ -2,6 +2,7 @@
 #define GAME_PIECE_H
 
 #include <SFML/Graphics.hpp>
+#include "Common.h"
 
 enum Direction
 {
@@ -22,6 +23,7 @@ class GamePiece : public sf::Drawable
         virtual void Move();
         bool isCollision(GamePiece& otherPiece);
         void randomizePosition();
+        void getPosition(int nPosition[2]);
     protected:
         virtual void Render(sf::RenderTarget& target, sf::Renderer& renderer) const;
         sf::Shape m_visual;

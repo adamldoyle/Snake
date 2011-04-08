@@ -1,24 +1,33 @@
 #include "SnakeGame.h"
+#include <iostream>
 
 const int FRAMES_PER_SECOND = 10;
 const float SKIP_TICKS = 1000 / FRAMES_PER_SECOND;
 const int SLEEP_TICKS = 10;
 
-SnakeGame::SnakeGame() : m_food(0, 0), m_viewRect(0.f, 0.f, 1990.f, 1990.f), m_bPaused(false), m_bGameOver(false)
+SnakeGame::SnakeGame() : m_food(0, 0), m_viewRect(0.f, 0.f, MAP_DIMENSION, MAP_DIMENSION), m_bPaused(false), m_bGameOver(false)
 {
-    m_app.Create(sf::VideoMode(700.f, 700.f), "Snake");
+    m_app.Create(sf::VideoMode(SCREEN_DIMENSION, SCREEN_DIMENSION), "Snake");
     sf::View view(m_viewRect);
     m_app.SetView(view);
     m_eUserDirection = CURRENT;
 
     std::srand(time(NULL));
-    m_food.randomizePosition();
+    reset();
 }
 
 void SnakeGame::reset()
 {
-    m_food.randomizePosition();
-    m_snake.reset();
+    for (int i = 0; i < PIXEL_LINE_COUNT; i++)
+    {
+        for (int j = 0; j < PIXEL_LINE_COUNT; j++)
+        {
+            m_collisionMap[i][j] = 0;
+        }
+    }
+
+    placeFood();
+    placeSnake();
     m_bGameOver = false;
 }
 
@@ -103,7 +112,27 @@ void SnakeGame::updateGame()
         m_snake.ChangeDirection(m_eUserDirection);
     }
 
+    int nHeadPosition[2];
+    int nTailPosition[2];
+
+    m_snake.getHeadPosition(nHeadPosition);
+    m_snake.getTailPosition(nTailPosition);
+    m_collisionMap[nHeadPosition[0]][nHeadPosition[1]] ^= PIECE_SNAKE_HEAD;
+    if (nHeadPosition[0] != nTailPosition[0] || nHeadPosition[1] != nTailPosition[1])
+    {
+        m_collisionMap[nHeadPosition[0]][nHeadPosition[1]] |= PIECE_SNAKE_BODY;
+        m_collisionMap[nTailPosition[0]][nTailPosition[1]] ^= PIECE_SNAKE_BODY;
+    }
+
     m_snake.Move();
+
+    // The head just entered this position
+    m_snake.getHeadPosition(nHeadPosition);
+    m_snake.getTailPosition(nTailPosition);
+    m_collisionMap[nHeadPosition[0]][nHeadPosition[1]] |= PIECE_SNAKE_HEAD;
+    if (nHeadPosition[0] != nTailPosition[0] || nHeadPosition[1] != nTailPosition[1])
+        m_collisionMap[nTailPosition[0]][nTailPosition[1]] |= PIECE_SNAKE_BODY;
+
     m_food.Move();
 
     checkCollisions();
@@ -111,19 +140,37 @@ void SnakeGame::updateGame()
 
 void SnakeGame::checkCollisions()
 {
-    if (m_snake.isSnakeCollision() || m_snake.isOutOfBounds(m_viewRect))
+    if (m_snake.isOutOfBounds(m_viewRect))
     {
         m_bGameOver = true;
+        return;
     }
 
-    if (m_snake.isCollision(m_food))
+    int nHeadPosition[2];
+    m_snake.getHeadPosition(nHeadPosition);
+
+    COLLISION_MAP_TYPE collisionValue = m_collisionMap[nHeadPosition[0]][nHeadPosition[1]] ^ PIECE_SNAKE_HEAD;
+    if (isCollision(collisionValue, PIECE_FOOD))
     {
         SnakeSection* section = new SnakeSection();
         section->SetPosition(m_food.GetPosition());
         m_snake.addSection(*section);
 
-        m_food.randomizePosition();
+        int nPosition[2];
+        m_food.getPosition(nPosition);
+        m_collisionMap[nPosition[0]][nPosition[1]] ^= PIECE_FOOD;
+
+        placeFood();
     }
+    else if (isCollision(collisionValue, PIECE_SNAKE_BODY))
+    {
+        m_bGameOver = true;
+    }
+}
+
+bool SnakeGame::isCollision(COLLISION_MAP_TYPE collisionValue, COLLISION_MAP_TYPE checkAgainst)
+{
+    return ((collisionValue & checkAgainst) == checkAgainst);
 }
 
 void SnakeGame::displayGame()
@@ -136,4 +183,30 @@ void SnakeGame::displayGame()
 
     // Update the window
     m_app.Display();
+}
+
+void SnakeGame::placeFood()
+{
+    int nPosition[2];
+    while (1)
+    {
+        m_food.randomizePosition();
+        m_food.getPosition(nPosition);
+        if (m_collisionMap[nPosition[0]][nPosition[1]] == PIECE_NONE)
+        {
+            m_collisionMap[nPosition[0]][nPosition[1]] = PIECE_FOOD;
+            break;
+        }
+    }
+}
+
+void SnakeGame::placeSnake()
+{
+    m_snake.reset();
+    m_collisionMap[0][0] = PIECE_SNAKE_HEAD;
+}
+
+void SnakeGame::placeWalls()
+{
+
 }
