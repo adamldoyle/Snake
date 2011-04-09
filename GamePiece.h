@@ -25,7 +25,7 @@ class GamePiece : public sf::Drawable
         void randomizePosition();
         void getPosition(int nPosition[2]);
         COLLISION_MAP_TYPE getPieceType() { return m_pieceType; }
-        virtual void handleCollision(Snake& snake, COLLISION_MAP_TYPE collisionMap[PIXEL_LINE_COUNT][PIXEL_LINE_COUNT]) = 0;
+        virtual bool handleCollision(Snake& snake, COLLISION_MAP_TYPE collisionMap[PIXEL_LINE_COUNT][PIXEL_LINE_COUNT]) = 0;
         void place(COLLISION_MAP_TYPE collisionMap[PIXEL_LINE_COUNT][PIXEL_LINE_COUNT]);
     protected:
         virtual void Render(sf::RenderTarget& target, sf::Renderer& renderer) const;

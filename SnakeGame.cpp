@@ -167,7 +167,11 @@ void SnakeGame::checkCollisions()
     {
         if (isCollision(collisionValue, (*iter)->getPieceType()))
         {
-            (*iter)->handleCollision(m_snake, m_collisionMap);
+            if ((*iter)->handleCollision(m_snake, m_collisionMap))
+            {
+                m_bGameOver = true;
+                return;
+            }
         }
     }
 }

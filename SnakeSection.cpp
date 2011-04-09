@@ -21,8 +21,3 @@ void SnakeSection::start()
 {
     m_nVelocity = VELOCITY;
 }
-
-void SnakeSection::handleCollision(Snake& snake, COLLISION_MAP_TYPE collisionMap[PIXEL_LINE_COUNT][PIXEL_LINE_COUNT])
-{
-
-}
