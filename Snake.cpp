@@ -44,13 +44,19 @@ void Snake::Render(sf::RenderTarget& target, sf::Renderer& renderer) const
 
 void Snake::Move()
 {
-    if (m_tail->m_pendingNextSection != NULL && m_tail->isCollision(*(m_tail->m_pendingNextSection)))
+    if (m_tail->m_pendingNextSection != NULL)
     {
-        m_tail->m_nextSection = m_tail->m_pendingNextSection;
-        m_tail->m_pendingNextSection = NULL;
-        m_tail = m_tail->m_nextSection;
-        m_tail->start();
-        m_nSize++;
+        int nPosition[2], nOtherPosition[2];
+        m_tail->getPosition(nPosition);
+        m_tail->m_pendingNextSection->getPosition(nOtherPosition);
+        if (nPosition[0] == nOtherPosition[0] && nPosition[1] == nOtherPosition[1])
+        {
+            m_tail->m_nextSection = m_tail->m_pendingNextSection;
+            m_tail->m_pendingNextSection = NULL;
+            m_tail = m_tail->m_nextSection;
+            m_tail->start();
+            m_nSize++;
+        }
     }
 
     m_head->Move();
@@ -83,11 +89,6 @@ void Snake::addSection(SnakeSection& section)
         curr = curr->m_pendingNextSection;
     }
     curr->m_pendingNextSection = &section;
-}
-
-bool Snake::isCollision(GamePiece& otherPiece)
-{
-    return m_head->isCollision(otherPiece);
 }
 
 bool Snake::isOutOfBounds(sf::FloatRect viewRect)

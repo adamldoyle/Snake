@@ -1,6 +1,6 @@
 #include "SnakeSection.h"
 
-SnakeSection::SnakeSection(float fpXPosition, float fpYPosition, Direction eDirection) : GamePiece(40, sf::Color::White, fpXPosition, fpYPosition, eDirection, 0.f), m_nextSection(NULL), m_pendingNextSection(NULL)
+SnakeSection::SnakeSection(float fpXPosition, float fpYPosition, COLLISION_MAP_TYPE pieceType, Direction eDirection) : GamePiece(40, sf::Color::White, fpXPosition, fpYPosition, pieceType, eDirection, 0.f), m_nextSection(NULL), m_pendingNextSection(NULL)
 {
 
 }
@@ -20,4 +20,9 @@ void SnakeSection::Move()
 void SnakeSection::start()
 {
     m_nVelocity = VELOCITY;
+}
+
+void SnakeSection::handleCollision(Snake& snake, COLLISION_MAP_TYPE collisionMap[PIXEL_LINE_COUNT][PIXEL_LINE_COUNT])
+{
+
 }

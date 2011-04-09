@@ -2,7 +2,10 @@
 #define SNAKE_GAME_H
 
 #include <SFML/Graphics.hpp>
+#include <list>
+
 #include "Common.h"
+#include "GamePiece.h"
 #include "Snake.h"
 #include "Food.h"
 
@@ -22,18 +25,15 @@ class SnakeGame
         void checkCollisions();
         bool isCollision(COLLISION_MAP_TYPE collisionValue, COLLISION_MAP_TYPE checkAgainst);
         void displayGame();
-        void placeFood();
         void placeSnake();
-        void placeWalls();
 
         sf::RenderWindow m_app;
         Snake m_snake;
-        Food m_food;
+        std::list<GamePiece*> m_lOtherPieces;
         Direction m_eUserDirection;
         sf::FloatRect m_viewRect;
         bool m_bPaused;
         bool m_bGameOver;
-
 
         COLLISION_MAP_TYPE m_collisionMap[PIXEL_LINE_COUNT][PIXEL_LINE_COUNT];
 };

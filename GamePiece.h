@@ -14,16 +14,19 @@ enum Direction
 };
 
 class GamePiece;
+class Snake;
 
 class GamePiece : public sf::Drawable
 {
     public:
-        GamePiece(int nDimension, sf::Color color, float fpXPosition, float fpYPosition, Direction eDirection = CURRENT, int nVelocity = 0);
+        GamePiece(int nDimension, sf::Color color, float fpXPosition, float fpYPosition, COLLISION_MAP_TYPE pieceType = PIECE_NONE, Direction eDirection = CURRENT, int nVelocity = 0);
         virtual ~GamePiece() { }
         virtual void Move();
-        bool isCollision(GamePiece& otherPiece);
         void randomizePosition();
         void getPosition(int nPosition[2]);
+        COLLISION_MAP_TYPE getPieceType() { return m_pieceType; }
+        virtual void handleCollision(Snake& snake, COLLISION_MAP_TYPE collisionMap[PIXEL_LINE_COUNT][PIXEL_LINE_COUNT]) = 0;
+        void place(COLLISION_MAP_TYPE collisionMap[PIXEL_LINE_COUNT][PIXEL_LINE_COUNT]);
     protected:
         virtual void Render(sf::RenderTarget& target, sf::Renderer& renderer) const;
         sf::Shape m_visual;
@@ -31,6 +34,7 @@ class GamePiece : public sf::Drawable
         Direction m_eDirection;
         int m_nDimension;
         int m_nVelocity;
+        COLLISION_MAP_TYPE m_pieceType;
     private:
 
 };

@@ -1,11 +1,12 @@
 #include "GamePiece.h"
 
-GamePiece::GamePiece(int nDimension, sf::Color color, float fpXPosition, float fpYPosition, Direction eDirection, int nVelocity)
+GamePiece::GamePiece(int nDimension, sf::Color color, float fpXPosition, float fpYPosition, COLLISION_MAP_TYPE pieceType, Direction eDirection, int nVelocity)
 {
     m_nDimension = nDimension;
     m_color = color;
     m_visual = sf::Shape::Rectangle(0, 0, m_nDimension, m_nDimension, m_color);
     m_eDirection = eDirection;
+    m_pieceType = pieceType;
     m_nVelocity = nVelocity;
     SetPosition(fpXPosition, fpYPosition);
 }
@@ -39,24 +40,6 @@ void GamePiece::Move()
     sf::Drawable::Move(nXDirection * m_nVelocity, nYDirection * m_nVelocity);
 }
 
-bool GamePiece::isCollision(GamePiece& otherPiece)
-{
-    float fpLeft1 = GetPosition().x;
-    float fpTop1 = GetPosition().y;
-    float fpLeft2 = otherPiece.GetPosition().x;
-    float fpTop2 = otherPiece.GetPosition().y;
-
-    if (fpTop1 + m_nDimension < fpTop2)
-        return false;
-    if (fpTop2 + otherPiece.m_nDimension < fpTop1)
-        return false;
-    if (fpLeft1 + m_nDimension < fpLeft2)
-        return false;
-    if (fpLeft2 + otherPiece.m_nDimension < fpLeft1)
-        return false;
-    return true;
-}
-
 void GamePiece::randomizePosition()
 {
     SetPosition((rand() % PIXEL_LINE_COUNT) * PIXEL_DIMENSION, (rand() % PIXEL_LINE_COUNT) * PIXEL_DIMENSION);
@@ -66,4 +49,19 @@ void GamePiece::getPosition(int nPosition[2])
 {
     nPosition[0] = (int)GetPosition().x / PIXEL_DIMENSION;
     nPosition[1] = (int)GetPosition().y / PIXEL_DIMENSION;
+}
+
+void GamePiece::place(COLLISION_MAP_TYPE collisionMap[PIXEL_LINE_COUNT][PIXEL_LINE_COUNT])
+{
+    int nPosition[2];
+    while (1)
+    {
+        randomizePosition();
+        getPosition(nPosition);
+        if (collisionMap[nPosition[0]][nPosition[1]] == PIECE_NONE)
+        {
+            collisionMap[nPosition[0]][nPosition[1]] = m_pieceType;
+            break;
+        }
+    }
 }

@@ -5,7 +5,7 @@ const int FRAMES_PER_SECOND = 10;
 const float SKIP_TICKS = 1000 / FRAMES_PER_SECOND;
 const int SLEEP_TICKS = 10;
 
-SnakeGame::SnakeGame() : m_food(0, 0), m_viewRect(0.f, 0.f, MAP_DIMENSION, MAP_DIMENSION), m_bPaused(false), m_bGameOver(false)
+SnakeGame::SnakeGame() : m_viewRect(0.f, 0.f, MAP_DIMENSION, MAP_DIMENSION), m_bPaused(false), m_bGameOver(false)//, m_food(0, 0)
 {
     m_app.Create(sf::VideoMode(SCREEN_DIMENSION, SCREEN_DIMENSION), "Snake");
     sf::View view(m_viewRect);
@@ -26,8 +26,13 @@ void SnakeGame::reset()
         }
     }
 
-    placeFood();
     placeSnake();
+
+    m_lOtherPieces.clear();
+    Food* food = new Food();
+    food->place(m_collisionMap);
+    m_lOtherPieces.push_back(food);
+
     m_bGameOver = false;
 }
 
@@ -126,14 +131,16 @@ void SnakeGame::updateGame()
 
     m_snake.Move();
 
-    // The head just entered this position
     m_snake.getHeadPosition(nHeadPosition);
     m_snake.getTailPosition(nTailPosition);
     m_collisionMap[nHeadPosition[0]][nHeadPosition[1]] |= PIECE_SNAKE_HEAD;
     if (nHeadPosition[0] != nTailPosition[0] || nHeadPosition[1] != nTailPosition[1])
         m_collisionMap[nTailPosition[0]][nTailPosition[1]] |= PIECE_SNAKE_BODY;
 
-    m_food.Move();
+    for (std::list<GamePiece*>::iterator iter = m_lOtherPieces.begin(); iter != m_lOtherPieces.end(); iter++)
+    {
+        (*iter)->Move();
+    }
 
     checkCollisions();
 }
@@ -148,23 +155,20 @@ void SnakeGame::checkCollisions()
 
     int nHeadPosition[2];
     m_snake.getHeadPosition(nHeadPosition);
-
     COLLISION_MAP_TYPE collisionValue = m_collisionMap[nHeadPosition[0]][nHeadPosition[1]] ^ PIECE_SNAKE_HEAD;
-    if (isCollision(collisionValue, PIECE_FOOD))
-    {
-        SnakeSection* section = new SnakeSection();
-        section->SetPosition(m_food.GetPosition());
-        m_snake.addSection(*section);
 
-        int nPosition[2];
-        m_food.getPosition(nPosition);
-        m_collisionMap[nPosition[0]][nPosition[1]] ^= PIECE_FOOD;
-
-        placeFood();
-    }
-    else if (isCollision(collisionValue, PIECE_SNAKE_BODY))
+    if (isCollision(collisionValue, PIECE_SNAKE_BODY))
     {
         m_bGameOver = true;
+        return;
+    }
+
+    for (std::list<GamePiece*>::iterator iter = m_lOtherPieces.begin(); iter != m_lOtherPieces.end(); iter++)
+    {
+        if (isCollision(collisionValue, (*iter)->getPieceType()))
+        {
+            (*iter)->handleCollision(m_snake, m_collisionMap);
+        }
     }
 }
 
@@ -175,38 +179,19 @@ bool SnakeGame::isCollision(COLLISION_MAP_TYPE collisionValue, COLLISION_MAP_TYP
 
 void SnakeGame::displayGame()
 {
-    // Clear screen
     m_app.Clear(sf::Color::Black);
 
     m_app.Draw(m_snake);
-    m_app.Draw(m_food);
-
-    // Update the window
-    m_app.Display();
-}
-
-void SnakeGame::placeFood()
-{
-    int nPosition[2];
-    while (1)
+    for (std::list<GamePiece*>::iterator iter = m_lOtherPieces.begin(); iter != m_lOtherPieces.end(); iter++)
     {
-        m_food.randomizePosition();
-        m_food.getPosition(nPosition);
-        if (m_collisionMap[nPosition[0]][nPosition[1]] == PIECE_NONE)
-        {
-            m_collisionMap[nPosition[0]][nPosition[1]] = PIECE_FOOD;
-            break;
-        }
+        m_app.Draw(**iter);
     }
+
+    m_app.Display();
 }
 
 void SnakeGame::placeSnake()
 {
     m_snake.reset();
     m_collisionMap[0][0] = PIECE_SNAKE_HEAD;
-}
-
-void SnakeGame::placeWalls()
-{
-
 }

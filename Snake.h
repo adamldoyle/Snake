@@ -13,7 +13,6 @@ class Snake : public sf::Drawable
         void Move();
         void ChangeDirection(Direction& eDirection);
         void addSection(SnakeSection& section);
-        bool isCollision(GamePiece& otherPiece);
         bool isOutOfBounds(sf::FloatRect viewRect);
         void reset();
         void getHeadPosition(int nPosition[2]);
