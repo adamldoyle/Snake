@@ -46,10 +46,10 @@ void Snake::Move()
 {
     if (m_tail->m_pendingNextSection != NULL)
     {
-        int nPosition[2], nOtherPosition[2];
-        m_tail->getPosition(nPosition);
-        m_tail->m_pendingNextSection->getPosition(nOtherPosition);
-        if (nPosition[0] == nOtherPosition[0] && nPosition[1] == nOtherPosition[1])
+        sf::Vector2i position, otherPosition;
+        position = m_tail->getPosition();
+        otherPosition = m_tail->m_pendingNextSection->getPosition();
+        if (position == otherPosition)
         {
             m_tail->m_nextSection = m_tail->m_pendingNextSection;
             m_tail->m_pendingNextSection = NULL;
@@ -91,20 +91,20 @@ void Snake::addSection(SnakeSection& section)
     curr->m_pendingNextSection = &section;
 }
 
-bool Snake::isOutOfBounds(sf::FloatRect viewRect)
+bool Snake::isOutOfBounds()
 {
-    return (m_head->GetPosition().x < viewRect.Left || m_head->GetPosition().y < viewRect.Top
-        || m_head->GetPosition().x + m_head->m_nDimension > viewRect.Left + viewRect.Width || m_head->GetPosition().y + m_head->m_nDimension > viewRect.Top + viewRect.Height);
+    sf::Vector2i position = getHeadPosition();
+    return position.x < 0 || position.y < 0 || position.x >= PIXEL_LINE_COUNT || position.y >= PIXEL_LINE_COUNT;
 }
 
-void Snake::getHeadPosition(int nPosition[2])
+sf::Vector2i Snake::getHeadPosition()
 {
-    m_head->getPosition(nPosition);
+    return m_head->getPosition();
 }
 
-void Snake::getTailPosition(int nPosition[2])
+sf::Vector2i Snake::getTailPosition()
 {
-    m_tail->getPosition(nPosition);
+    return m_tail->getPosition();
 }
 
 int Snake::getSize()

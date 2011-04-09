@@ -13,10 +13,10 @@ class Snake : public sf::Drawable
         void Move();
         void ChangeDirection(Direction& eDirection);
         void addSection(SnakeSection& section);
-        bool isOutOfBounds(sf::FloatRect viewRect);
+        bool isOutOfBounds();
         void reset();
-        void getHeadPosition(int nPosition[2]);
-        void getTailPosition(int nPosition[2]);
+        sf::Vector2i getHeadPosition();
+        sf::Vector2i getTailPosition();
         int getSize();
     protected:
         virtual void Render(sf::RenderTarget& target, sf::Renderer& renderer) const;

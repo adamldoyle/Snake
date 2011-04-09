@@ -1,5 +1,7 @@
 #include "GamePiece.h"
 
+#define COLLISION_MAP_POINT(vector) collisionMap[vector.x][vector.y]
+
 GamePiece::GamePiece(int nDimension, sf::Color color, float fpXPosition, float fpYPosition, COLLISION_MAP_TYPE pieceType, Direction eDirection, int nVelocity)
 {
     m_nDimension = nDimension;
@@ -45,22 +47,23 @@ void GamePiece::randomizePosition()
     SetPosition((rand() % PIXEL_LINE_COUNT) * PIXEL_DIMENSION, (rand() % PIXEL_LINE_COUNT) * PIXEL_DIMENSION);
 }
 
-void GamePiece::getPosition(int nPosition[2])
+sf::Vector2i GamePiece::getPosition()
 {
-    nPosition[0] = (int)GetPosition().x / PIXEL_DIMENSION;
-    nPosition[1] = (int)GetPosition().y / PIXEL_DIMENSION;
+    int x = (int)GetPosition().x / PIXEL_DIMENSION;
+    int y = (int)GetPosition().y / PIXEL_DIMENSION;
+    return sf::Vector2i(x, y);
 }
 
 void GamePiece::place(COLLISION_MAP_TYPE collisionMap[PIXEL_LINE_COUNT][PIXEL_LINE_COUNT])
 {
-    int nPosition[2];
+    sf::Vector2i position;
     while (1)
     {
         randomizePosition();
-        getPosition(nPosition);
-        if (collisionMap[nPosition[0]][nPosition[1]] == PIECE_NONE)
+        position = getPosition();
+        if (COLLISION_MAP_POINT(position) == PIECE_NONE)
         {
-            collisionMap[nPosition[0]][nPosition[1]] = m_pieceType;
+            COLLISION_MAP_POINT(position) = m_pieceType;
             break;
         }
     }

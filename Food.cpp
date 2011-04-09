@@ -7,12 +7,11 @@ Food::Food() : GamePiece(30, sf::Color::White, 0.f, 0.f, PIECE_FOOD, CURRENT, 0)
 
 bool Food::handleCollision(Snake& snake, COLLISION_MAP_TYPE collisionMap[PIXEL_LINE_COUNT][PIXEL_LINE_COUNT])
 {
-    int nPosition[2];
-    getPosition(nPosition);
+    sf::Vector2i position = getPosition();
     SnakeSection* section = new SnakeSection(GetPosition().x, GetPosition().y);
     snake.addSection(*section);
 
-    collisionMap[nPosition[0]][nPosition[1]] ^= m_pieceType;
+    collisionMap[position.x][position.y] ^= m_pieceType;
 
     place(collisionMap);
 

@@ -23,7 +23,7 @@ class GamePiece : public sf::Drawable
         virtual ~GamePiece() { }
         virtual void Move();
         void randomizePosition();
-        void getPosition(int nPosition[2]);
+        sf::Vector2i getPosition();
         COLLISION_MAP_TYPE getPieceType() { return m_pieceType; }
         virtual bool handleCollision(Snake& snake, COLLISION_MAP_TYPE collisionMap[PIXEL_LINE_COUNT][PIXEL_LINE_COUNT]) = 0;
         void place(COLLISION_MAP_TYPE collisionMap[PIXEL_LINE_COUNT][PIXEL_LINE_COUNT]);

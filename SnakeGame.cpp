@@ -1,6 +1,8 @@
 #include "SnakeGame.h"
 #include <iostream>
 
+#define COLLISION_MAP_POINT(vector) m_collisionMap[vector.x][vector.y]
+
 const int FRAMES_PER_SECOND = 10;
 const float SKIP_TICKS = 1000 / FRAMES_PER_SECOND;
 const int SLEEP_TICKS = 10;
@@ -117,25 +119,24 @@ void SnakeGame::updateGame()
         m_snake.ChangeDirection(m_eUserDirection);
     }
 
-    int nHeadPosition[2];
-    int nTailPosition[2];
+    sf::Vector2i headPosition, tailPosition;
 
-    m_snake.getHeadPosition(nHeadPosition);
-    m_snake.getTailPosition(nTailPosition);
-    m_collisionMap[nHeadPosition[0]][nHeadPosition[1]] ^= PIECE_SNAKE_HEAD;
-    if (nHeadPosition[0] != nTailPosition[0] || nHeadPosition[1] != nTailPosition[1])
+    headPosition = m_snake.getHeadPosition();
+    tailPosition = m_snake.getTailPosition();
+    COLLISION_MAP_POINT(headPosition) ^= PIECE_SNAKE_HEAD;
+    if (headPosition != tailPosition)
     {
-        m_collisionMap[nHeadPosition[0]][nHeadPosition[1]] |= PIECE_SNAKE_BODY;
-        m_collisionMap[nTailPosition[0]][nTailPosition[1]] ^= PIECE_SNAKE_BODY;
+        COLLISION_MAP_POINT(headPosition) |= PIECE_SNAKE_BODY;
+        COLLISION_MAP_POINT(tailPosition) ^= PIECE_SNAKE_BODY;
     }
 
     m_snake.Move();
 
-    m_snake.getHeadPosition(nHeadPosition);
-    m_snake.getTailPosition(nTailPosition);
-    m_collisionMap[nHeadPosition[0]][nHeadPosition[1]] |= PIECE_SNAKE_HEAD;
-    if (nHeadPosition[0] != nTailPosition[0] || nHeadPosition[1] != nTailPosition[1])
-        m_collisionMap[nTailPosition[0]][nTailPosition[1]] |= PIECE_SNAKE_BODY;
+    headPosition = m_snake.getHeadPosition();
+    tailPosition = m_snake.getTailPosition();
+    COLLISION_MAP_POINT(headPosition) |= PIECE_SNAKE_HEAD;
+    if (headPosition != tailPosition)
+        COLLISION_MAP_POINT(tailPosition) |= PIECE_SNAKE_BODY;
 
     for (std::list<GamePiece*>::iterator iter = m_lOtherPieces.begin(); iter != m_lOtherPieces.end(); iter++)
     {
@@ -147,15 +148,14 @@ void SnakeGame::updateGame()
 
 void SnakeGame::checkCollisions()
 {
-    if (m_snake.isOutOfBounds(m_viewRect))
+    if (m_snake.isOutOfBounds())
     {
         m_bGameOver = true;
         return;
     }
 
-    int nHeadPosition[2];
-    m_snake.getHeadPosition(nHeadPosition);
-    COLLISION_MAP_TYPE collisionValue = m_collisionMap[nHeadPosition[0]][nHeadPosition[1]] ^ PIECE_SNAKE_HEAD;
+    sf::Vector2i headPosition = m_snake.getHeadPosition();
+    COLLISION_MAP_TYPE collisionValue = COLLISION_MAP_POINT(headPosition) ^ PIECE_SNAKE_HEAD;
 
     if (isCollision(collisionValue, PIECE_SNAKE_BODY))
     {
