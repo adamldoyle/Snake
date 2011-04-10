@@ -1,6 +1,6 @@
 #include "Food.h"
 
-Food::Food() : GamePiece(30, sf::Color::White, 0.f, 0.f, PIECE_FOOD, CURRENT, 0)
+Food::Food() : GamePiece(30, sf::Color::Red, 0.f, 0.f, PIECE_FOOD, CURRENT, 0)
 {
     m_visual.SetPosition(5.f, 5.f);
 }

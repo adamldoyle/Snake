@@ -3,11 +3,9 @@
 
 #include <SFML/Graphics.hpp>
 #include <list>
+#include "Snake.h"
 
 #include "Common.h"
-#include "GamePiece.h"
-#include "Snake.h"
-#include "Food.h"
 
 class SnakeGame
 {

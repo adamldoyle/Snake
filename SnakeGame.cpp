@@ -1,5 +1,9 @@
-#include "SnakeGame.h"
 #include <iostream>
+
+#include "SnakeGame.h"
+#include "GamePiece.h"
+#include "Food.h"
+#include "Wall.h"
 
 #define COLLISION_MAP_POINT(vector) m_collisionMap[vector.x][vector.y]
 
@@ -30,10 +34,22 @@ void SnakeGame::reset()
 
     placeSnake();
 
+    for (std::list<GamePiece*>::iterator iter = m_lOtherPieces.begin(); iter != m_lOtherPieces.end(); iter++)
+    {
+        delete *iter;
+    }
     m_lOtherPieces.clear();
+
     Food* food = new Food();
     food->place(m_collisionMap);
     m_lOtherPieces.push_back(food);
+
+    for (int i = 0; i < 50; i++)
+    {
+        Wall* wall = new Wall();
+        wall->place(m_collisionMap);
+        m_lOtherPieces.push_back(wall);
+    }
 
     m_bGameOver = false;
 }
