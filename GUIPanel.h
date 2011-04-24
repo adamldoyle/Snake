@@ -11,6 +11,7 @@ class GUIPanel : public sf::Drawable
         GUIPanel(sf::FloatRect rect);
         virtual ~GUIPanel();
         void update(Snake& snake);
+        void reset();
     protected:
         virtual void Render(sf::RenderTarget& target, sf::Renderer& renderer) const;
     private:

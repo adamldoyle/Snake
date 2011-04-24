@@ -59,6 +59,7 @@ void SnakeGame::reset()
     {
         m_collisionMap[i][0] ^= PIECE_FREE;
     }
+    m_panel.reset();
 
     m_bGameOver = false;
 }
@@ -89,8 +90,8 @@ void SnakeGame::run()
         if (!m_bPaused && !m_bGameOver)
         {
             updateGame();
-            displayGame();
         }
+        displayGame();
     }
 }
 
@@ -221,6 +222,16 @@ void SnakeGame::displayGame()
     }
 
     m_app.Draw(m_panel);
+
+    if (m_bPaused)
+    {
+        sf::Text temp = sf::Text("P A U S E D");
+        temp.SetColor(sf::Color::Blue);
+        temp.SetStyle(sf::Text::Bold);
+        temp.SetCharacterSize(300);
+        temp.SetPosition(650.f, (MAP_DIMENSION - 300.f) / 2 - 50.f);
+        m_app.Draw(temp);
+    }
 
     m_app.Display();
 }

@@ -21,6 +21,7 @@ void GUIPanel::Render(sf::RenderTarget& target, sf::Renderer& renderer) const
     sprintf(buffer, "%d", m_nPlayerScore);
 
     sf::Text temp = sf::Text(buffer);
+    temp.SetCharacterSize(60);
     target.Draw(temp);
 }
 
@@ -34,4 +35,9 @@ void GUIPanel::update(Snake& snake)
 
     int bonus = (m_nSnakeLength / PIECES_PER_TIME_BONUS) + 1;
     m_nPlayerScore += (bonus * TIME_BONUS);
+}
+
+void GUIPanel::reset()
+{
+    m_nPlayerScore = 0;
 }
