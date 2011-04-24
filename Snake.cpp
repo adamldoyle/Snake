@@ -2,7 +2,7 @@
 
 Snake::Snake() : sf::Drawable(), m_nSize(1)
 {
-    m_head = m_tail = new SnakeSection(0.f, 0.f, RIGHT);
+    m_head = m_tail = new SnakeSection(sf::Vector2f(0.f, 0.f), RIGHT);
     m_head->start();
 }
 
@@ -110,4 +110,10 @@ sf::Vector2i Snake::getTailPosition()
 int Snake::getSize()
 {
     return m_nSize;
+}
+
+void Snake::place(COLLISION_MAP_TYPE collisionMap[PIXEL_LINE_COUNT][PIXEL_LINE_COUNT])
+{
+    reset();
+    collisionMap[0][0] = PIECE_SNAKE_HEAD;
 }

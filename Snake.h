@@ -18,6 +18,7 @@ class Snake : public sf::Drawable
         sf::Vector2i getHeadPosition();
         sf::Vector2i getTailPosition();
         int getSize();
+        void place(COLLISION_MAP_TYPE collisionMap[PIXEL_LINE_COUNT][PIXEL_LINE_COUNT]);
     protected:
         virtual void Render(sf::RenderTarget& target, sf::Renderer& renderer) const;
     private:

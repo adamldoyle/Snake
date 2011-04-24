@@ -3,9 +3,11 @@
 
 #include <SFML/Graphics.hpp>
 #include <list>
-#include "Snake.h"
 
 #include "Common.h"
+
+#include "Snake.h"
+#include "GUIPanel.h"
 
 class SnakeGame
 {
@@ -23,13 +25,13 @@ class SnakeGame
         void checkCollisions();
         bool isCollision(COLLISION_MAP_TYPE collisionValue, COLLISION_MAP_TYPE checkAgainst);
         void displayGame();
-        void placeSnake();
 
         sf::RenderWindow m_app;
         Snake m_snake;
         std::list<GamePiece*> m_lOtherPieces;
         Direction m_eUserDirection;
-        sf::FloatRect m_viewRect;
+        GUIPanel m_panel;
+        sf::View m_view;
         bool m_bPaused;
         bool m_bGameOver;
 

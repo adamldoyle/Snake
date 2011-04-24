@@ -2,7 +2,7 @@
 
 #define COLLISION_MAP_POINT(vector) collisionMap[vector.x][vector.y]
 
-GamePiece::GamePiece(int nDimension, sf::Color color, float fpXPosition, float fpYPosition, COLLISION_MAP_TYPE pieceType, Direction eDirection, int nVelocity)
+GamePiece::GamePiece(int nDimension, sf::Color color, sf::Vector2f position, COLLISION_MAP_TYPE pieceType, Direction eDirection, int nVelocity)
 {
     m_nDimension = nDimension;
     m_color = color;
@@ -10,7 +10,7 @@ GamePiece::GamePiece(int nDimension, sf::Color color, float fpXPosition, float f
     m_eDirection = eDirection;
     m_pieceType = pieceType;
     m_nVelocity = nVelocity;
-    SetPosition(fpXPosition, fpYPosition);
+    SetPosition(position);
 }
 
 void GamePiece::Render(sf::RenderTarget& target, sf::Renderer& renderer) const

@@ -11,7 +11,7 @@ class SnakeSection : public GamePiece
     friend class Snake;
 
     public:
-        SnakeSection(float fpXPosition = 0.f, float fpYPosition = 0.f, COLLISION_MAP_TYPE pieceType = PIECE_SNAKE_BODY, Direction eDirection = CURRENT);
+        SnakeSection(sf::Vector2f position = sf::Vector2f(0.f, 0.f), COLLISION_MAP_TYPE pieceType = PIECE_SNAKE_BODY, Direction eDirection = CURRENT);
         virtual ~SnakeSection() { }
         void Move();
         virtual bool handleCollision(Snake& snake, COLLISION_MAP_TYPE collisionMap[PIXEL_LINE_COUNT][PIXEL_LINE_COUNT]) { return true; }

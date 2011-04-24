@@ -1,6 +1,6 @@
 #include "SnakeSection.h"
 
-SnakeSection::SnakeSection(float fpXPosition, float fpYPosition, COLLISION_MAP_TYPE pieceType, Direction eDirection) : GamePiece(40, sf::Color::White, fpXPosition, fpYPosition, pieceType, eDirection, 0.f), m_nextSection(NULL), m_pendingNextSection(NULL)
+SnakeSection::SnakeSection(sf::Vector2f(position), COLLISION_MAP_TYPE pieceType, Direction eDirection) : GamePiece(40, sf::Color::Green, position, pieceType, eDirection, 0.f), m_nextSection(NULL), m_pendingNextSection(NULL)
 {
 
 }

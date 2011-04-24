@@ -19,7 +19,7 @@ class Snake;
 class GamePiece : public sf::Drawable
 {
     public:
-        GamePiece(int nDimension, sf::Color color, float fpXPosition, float fpYPosition, COLLISION_MAP_TYPE pieceType = PIECE_NONE, Direction eDirection = CURRENT, int nVelocity = 0);
+        GamePiece(int nDimension, sf::Color color, sf::Vector2f position, COLLISION_MAP_TYPE pieceType = PIECE_NONE, Direction eDirection = CURRENT, int nVelocity = 0);
         virtual ~GamePiece() { }
         virtual void Move();
         void randomizePosition();
